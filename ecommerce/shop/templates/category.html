@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+    {{category.description|truncatewords:155}}
+  {% else %}
+    Welcome to ABC store where you can buy different items....
+  {% endif %}
+{% endblock %}
+{% block title %}
+ {% if category %}
+    {{category.name}}-ABC Store
+  {% else %}
+    See our new collections -ABC Store
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx-auto">
+        <p><a href="{% url 'shop:allProdCat' %}">Our Product Collections</a></p>
+        </div>
+    </div>
+</div>
+      {% endif %}
+<div class="mx_auto">
+    {% if category %}
+    <strong>{{category.name}}</strong><br><br>
+    <img class="my_image" src="{{category.img.url}}" style="width:250px; height:250px; "alt="{{category.name}} ">
+
+    </div>
+        <br>
+        <div>
+            <h1 class="text-center my_title">{{category.name}}</h1><br><br>
+
+
+
+        </div>
+        {% else %}
+<div>
+        <img class="my_image my_image_padding" src="{% static 'img/3588607.jpg' %}" alt='our products'>
+    </div>
+<br>
+<div>
+
+    <p class="text-justify">Welcome to our online shopping website! We are thrilled to have you here and provide you with a delightful shopping experience. Our website is designed to offer a wide range of products from various categories, ensuring that you can find everything you need in one convenient place.</p>
+    <p class="text-justify">We take pride in our excellent customer service. Our dedicated support team is always ready to assist you with any inquiries, concerns, or order-related issues. Feel free to reach out to us through our contact page, and we will promptly respond to your queries.</p>
+    <p class="text-justify">Thank you for choosing our online shopping website. We hope you have a fantastic shopping experience and find everything you're looking for. Happy shopping!</p>
+     <h1 class="text-center my_title">Our Products Collections</h1>
+    <br>
+    <br>
+</div>
+
+ {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for products in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+            <div class="card text-center " style="min-width:18rem; max-width:18rem; padding-bottom:0px;padding-top:25px;">
+                <a href="{{products.get_url}}"><img class="card-img-top my_image"src="{{products.img.url}}" style=" height:250px;" alt="{{products.name}}"></a><br>
+                </div>
+                <div class="card-body">
+                    <h4>{{products.name}}</h4>
+                    <p>{{products.price}}</p>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+{% endblock %}
